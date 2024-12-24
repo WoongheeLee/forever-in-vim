@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forever in Vim 🌀</title>
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-700: #374151;
+            --gray-900: #111827;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--gray-900);
+            background: var(--gray-50);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            position: sticky;
+            top: 0;
+            background: var(--gray-50);
+            padding: 1rem;
+            z-index: 100;
+        }
+        
+        .nav-button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            background: white;
+            color: var(--gray-700);
+            cursor: pointer;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+        
+        .nav-button:hover {
+            background: var(--gray-100);
+        }
+        
+        .nav-button.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .section ul,
+        .section ol {
+            padding-left: 1.5rem;  /* 불릿포인트가 section 안에 들어오도록 패딩 추가 */
+            margin: 0.5rem 0;      /* 위아래 여백 추가 */
+        }
+
+        .section li {
+            margin: 0.25rem 0;     /* 리스트 아이템 간 간격 추가 */
+        }
+        
+        .section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--gray-200);
+        }
+        
+        .section h3 {
+            font-size: 1.2rem;
+            margin: 1.5rem 0 1rem;
+            color: var(--gray-700);
+        }
+        
+        .section:not(.active) {
+            display: none;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border: 1px solid var(--gray-200);
+        }
+        
+        th {
+            background: var(--gray-50);
+            font-weight: 600;
+        }
+        
+        code {
+            background: var(--gray-100);
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        
+        pre code {
+            display: block;
+            padding: 1rem;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            background: var(--gray-900);
+            color: white;
+            border-radius: 0.5rem;
+        }
+        
+        .example {
+            background: var(--gray-100);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            color: var(--gray-700);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .nav {
+                flex-direction: column;
+                padding: 0.5rem;
+            }
+            
+            .nav-button {
+                width: 100%;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+        /* 깃허브 스타용 배너 */
+        .github-banner {
+            background-color: #24292e;
+            color: #ffffff;
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .github-banner a {
+            color: #58a6ff;  /* GitHub 스타일의 밝은 파란색 링크 */
+            text-decoration: none;
+            margin-left: 8px;
+        }
+
+        .github-banner a:hover {
+            text-decoration: underline;
+        }
+
+        .github-star {
+            display: inline-flex;
+            align-items: center;
+            background: #2ea44f;  /* GitHub의 녹색 버튼 색상 */
+            color: white;
+            padding: 4px 12px;
+            border-radius: 6px;
+            margin-left: 8px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="github-banner">
+        이 페이지가 유용하다고 생각하시나요?
+        <a href="https://github.com/WoongheeLee/forever-in-vim" target="_blank">
+            GitHub에서 스타를 눌러주세요!
+            <span class="github-star">⭐ Star</span>
+        </a>
+    </div>
+    <div class="container">
+        <header class="header">
+            <h1>Forever in Vim 🌀</h1>
+            <p>Vim은 초보자는 명령어 때문에, 익숙한 사용자는 매력 때문에 빠져나가기가 어렵습니다.</p>
+            <p>Vim의 세계로 들어왔다면 이제는 무한으로 즐겨보세요!</p>
+        </header>
+
+        <nav class="nav">
+            <button class="nav-button active" data-section="basic">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m16 10-4 4-4-4"/></svg>
+                기본 명령어
+            </button>
+            <button class="nav-button" data-section="movement">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 9 7-7 7 7"/><path d="M12 16V2"/><path d="M19 16v6"/><path d="M5 16v6"/></svg>
+                이동 명령어
+            </button>
+            <button class="nav-button" data-section="edit">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                편집 명령어
+            </button>
+            <button class="nav-button" data-section="search">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                검색 및 치환
+            </button>
+            <button class="nav-button" data-section="visual">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7v10"/><path d="M6 5v14"/><path d="M10 3v18"/><path d="M14 7v10"/><path d="M18 4v16"/><path d="M22 7v10"/></svg>
+                시각 모드
+            </button>
+            <button class="nav-button" data-section="copypaste">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>
+                복사/붙여넣기
+            </button>
+            <button class="nav-button" data-section="split">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M12 3v18"/></svg>
+                창 분할
+            </button>
+            <button class="nav-button" data-section="multiline">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></svg>
+                여러 줄 편집
+            </button>
+            <button class="nav-button" data-section="diff">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M3 16v5h5"/><path d="M16 21h5v-5"/></svg>
+                Diff 비교
+            </button>
+            <button class="nav-button" data-section="vimrc">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                Vimrc 설정
+            </button>
+        </nav>
+
+        <main>
+            <section id="basic" class="section active">
+                <h2>기본 명령어</h2>
+                <div class="example">
+                    <h3>Vim에서 탈출하는 명령어</h3>
+                    <ul>
+                        <li><code>:q</code> - 저장 없이 종료</li>
+                        <li><code>:wq</code> - 저장 후 종료</li>
+                        <li><code>:q!</code> - 저장하지 않고 강제 종료</li>
+                    </ul>
+                    <p class="info-box"><strong>그래도 나가기 어려울 때는?</strong> 그냥 "Ctrl+C" 후 "power off"를 누릅니다. 😅</p>
+                </div>
+
+                <h3>파일 저장 및 종료</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>명령어</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>:w</code></td><td>파일 저장</td></tr>
+                        <tr><td><code>:q</code></td><td>Vim 종료</td></tr>
+                        <tr><td><code>:wq</code></td><td>저장 후 종료</td></tr>
+                        <tr><td><code>:q!</code></td><td>저장하지 않고 강제 종료</td></tr>
+                        <tr><td><code>:x</code></td><td>저장 후 종료 (단축 명령)</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="movement" class="section">
+                <h2>이동 명령어</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>명령어</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>h</code></td><td>왼쪽으로 한 칸 이동</td></tr>
+                        <tr><td><code>l</code></td><td>오른쪽으로 한 칸 이동</td></tr>
+                        <tr><td><code>j</code></td><td>아래로 한 줄 이동</td></tr>
+                        <tr><td><code>k</code></td><td>위로 한 줄 이동</td></tr>
+                        <tr><td><code>w</code></td><td>다음 단어로 이동</td></tr>
+                        <tr><td><code>e</code></td><td>단어 끝으로 이동</td></tr>
+                        <tr><td><code>b</code></td><td>이전 단어로 이동</td></tr>
+                        <tr><td><code>gg</code></td><td>파일의 맨 처음으로 이동</td></tr>
+                        <tr><td><code>G</code></td><td>파일의 맨 끝으로 이동</td></tr>
+                        <tr><td><code>Ctrl+d</code></td><td>화면의 절반 아래로 스크롤</td></tr>
+                        <tr><td><code>Ctrl+u</code></td><td>화면의 절반 위로 스크롤</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="search" class="section">
+                <h2>검색 및 치환</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>명령어</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>/pattern</code></td><td>pattern 문자열 검색</td></tr>
+                        <tr><td><code>n</code></td><td>다음 검색 결과로 이동</td></tr>
+                        <tr><td><code>N</code></td><td>이전 검색 결과로 이동</td></tr>
+                        <tr><td><code>:%s/old/new/g</code></td><td>파일 전체에서 old를 new로 치환</td></tr>
+                        <tr><td><code>:%s/old/new/gc</code></td><td>치환 전에 사용자 확인</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="edit" class="section">
+                <h2>편집 명령어</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>명령어</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>i</code></td><td>커서 앞에 텍스트 삽입</td></tr>
+                        <tr><td><code>a</code></td><td>커서 뒤에 텍스트 삽입</td></tr>
+                        <tr><td><code>o</code></td><td>현재 줄 아래에 새로운 줄 삽입</td></tr>
+                        <tr><td><code>dd</code></td><td>현재 줄 삭제</td></tr>
+                        <tr><td><code>dG</code></td><td>현재 줄부터 파일 끝까지 삭제</td></tr>
+                        <tr><td><code>x</code></td><td>커서 위치의 문자 삭제</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="visual" class="section">
+                <h2>시각 모드</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>명령어</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>v</code></td><td>시각 모드 시작 (문자 단위 선택)</td></tr>
+                        <tr><td><code>V</code></td><td>시각 모드 시작 (줄 단위 선택)</td></tr>
+                        <tr><td><code>Ctrl+v</code></td><td>시각 모드 시작 (블록 단위 선택)</td></tr>
+                        <tr><td><code>y</code></td><td>선택한 영역 복사</td></tr>
+                        <tr><td><code>d</code></td><td>선택한 영역 삭제</td></tr>
+                        <tr><td><code>></code></td><td>선택한 영역 들여쓰기</td></tr>
+                        <tr><td><code><</code></td><td>선택한 영역 내어쓰기</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+
+            <section id="copypaste" class="section">
+                <h2>복사 및 붙여넣기</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>명령어</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>yy</code></td><td>현재 줄 복사</td></tr>
+                        <tr><td><code>y$</code></td><td>현재 줄의 커서 이후만 복사</td></tr>
+                        <tr><td><code>p</code></td><td>복사한 내용 붙여넣기</td></tr>
+                        <tr><td><code>u</code></td><td>마지막 작업 취소 (undo)</td></tr>
+                        <tr><td><code>Ctrl+r</code></td><td>취소한 작업 복구 (redo)</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="split" class="section">
+                <h2>창 분할</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>명령어</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>:split</code></td><td>수평 창 분할</td></tr>
+                        <tr><td><code>:vsplit</code></td><td>수직 창 분할</td></tr>
+                        <tr><td><code>Ctrl+w w</code></td><td>다음 창으로 이동</td></tr>
+                        <tr><td><code>Ctrl+w q</code></td><td>현재 창 닫기</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="multiline" class="section">
+                <h2>여러 줄 편집</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>명령어</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>v + 선택 + :</code></td><td>시각 모드로 영역을 선택한 후 명령어 실행 (norm 명령어와 함께 사용 가능)</td></tr>
+                        <tr><td><code>Ctrl+v + I + 텍스트 + Esc</code></td><td>블록 선택 후 여러 줄의 시작에 텍스트 삽입</td></tr>
+                        <tr><td><code>Ctrl+v + d</code></td><td>블록 선택 후 여러 줄의 텍스트 삭제</td></tr>
+                        <tr><td><code>:%norm i#</code></td><td>파일 전체의 각 줄 앞에 # 추가</td></tr>
+                        <tr><td><code>:%norm ^x</code></td><td>파일 전체에서 각 줄의 첫 글자 삭제</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>예제:</h3>
+                <div class="example">
+                    <h4>1. 여러 줄 주석 달기</h4>
+                    <ol>
+                        <li>주석을 달고 싶은 범위를 선택합니다.
+                            <ul>
+                                <li><strong>방법 1:</strong> <code>v</code>를 눌러 문자 단위로 선택</li>
+                                <li><strong>방법 2:</strong> <code>Ctrl+v</code>를 눌러 블록 단위로 선택</li>
+                            </ul>
+                        </li>
+                        <li><code>:</code>을 입력한 뒤 아래 명령어를 실행합니다.
+                            <pre><code>:norm i#</code></pre>
+                        </li>
+                    </ol>
+                </div>
+
+                <div class="example">
+                    <h4>2. 여러 줄에서 첫 글자 삭제</h4>
+                    <ol>
+                        <li>삭제할 줄을 시각 모드(<code>v</code> 또는 <code>Ctrl+v</code>)로 선택합니다.</li>
+                        <li><code>:</code>을 입력한 뒤 아래 명령어를 실행합니다.
+                            <pre><code>:norm ^x</code></pre>
+                        </li>
+                    </ol>
+                </div>
+            </section>
+
+            <section id="diff" class="section">
+                <h2>Diff 비교</h2>
+                <h3>두 파일의 차이점(diff) 비교하기</h3>
+                
+                <div class="example">
+                    <h4>단계 1: 두 파일 열기</h4>
+                    <p>터미널에서 Vim을 실행하면서 두 파일을 입력합니다:</p>
+                    <pre><code>vim -d file1 file2</code></pre>
+                    <p>또는 Vim 내부에서 다음 명령어를 실행합니다:</p>
+                    <pre><code>:vert diffsplit file2</code></pre>
+                </div>
+
+                <div class="example">
+                    <h4>단계 2: 차이점 탐색</h4>
+                    <ul>
+                        <li><code>]c</code> : 다음 변경 사항으로 이동</li>
+                        <li><code>[c</code> : 이전 변경 사항으로 이동</li>
+                    </ul>
+                </div>
+
+                <div class="example">
+                    <h4>단계 3: 창 이동</h4>
+                    <ul>
+                        <li><code>Ctrl+w w</code> : 다음 창으로 이동</li>
+                        <li><code>Ctrl+w h</code> : 왼쪽 창으로 이동</li>
+                        <li><code>Ctrl+w l</code> : 오른쪽 창으로 이동</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="vimrc" class="section">
+                <h2>Vimrc 설정</h2>
+                <p>아래는 자주 사용하는 .vimrc 설정 파일입니다:</p>
+                <pre><code>set shiftwidth=4      " 들여쓰기 공백 너비를 4칸으로 설정
+set tabstop=4         " 탭 키의 공백 너비를 4칸으로 설정
+set ignorecase        " 검색 시 대소문자 구분 없음
+set hlsearch          " 검색어를 하이라이트 표시
+set background=dark   " 어두운 배경에 최적화된 색상 설정
+set nocompatible      " 호환 모드 비활성화 (더 현대적인 Vim 기능 활성화)
+set history=1000      " 명령어 히스토리를 1000개까지 저장
+set ruler             " 상태 표시줄에 커서 위치 표시
+set nobackup          " 백업 파일 생성하지 않음
+set title             " 현재 편집 중인 파일 이름을 창 제목에 표시
+
+set softtabstop=4     " 소프트 탭을 4칸으로 설정 (탭키 누르면 스페이스 키 네 번 눌린 효과)
+set shiftwidth=4      " 들여쓰기 시 사용할 공백 너비를 4칸으로 설정
+set smartindent       " 스마트 들여쓰기 설정
+set nu                " 줄 번호 표시
+set expandtab         " 탭 대신 공백을 삽입</code></pre>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p><a href="https://github.com/WoongheeLee">이웅희</a> 💙을 담아 만듦</p>
+        </footer>
+    </div>
+
+    <script>
+        document.querySelectorAll('.nav-button').forEach(button => {
+            button.addEventListener('click', () => {
+                // 활성 버튼 스타일 변경
+                document.querySelectorAll('.nav-button').forEach(b => b.classList.remove('active'));
+                button.classList.add('active');
+                
+                // 섹션 표시/숨김
+                const sectionId = button.dataset.section;
+                document.querySelectorAll('.section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                document.getElementById(sectionId).classList.add('active');
+
+                // 스크롤
+                document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
